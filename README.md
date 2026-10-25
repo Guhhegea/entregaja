@@ -26,3 +26,23 @@ Logs JSON no stdout · `GET /health` · `GET /metrics` (formato Prometheus).
 ## Endpoints principais
 `POST /api/register` · `POST /api/login` · `GET /api/restaurants?q=` · `GET /api/restaurants/<id>/menu` ·
 `GET|POST /api/cart/items` · `PATCH|DELETE /api/cart/items/<id>` · `POST /api/orders` · `GET /api/orders/<id>` · `POST /api/orders/<id>/advance`
+## Equipe
+
+Projeto desenvolvido em grupo para a atividade de DevOps, com processo Scrum, versionamento no GitHub e pipeline de CI/CD.
+
+| Integrante | GitHub | Papel no Scrum | Responsabilidades |
+
+|---|---|---|---|
+
+| Gustavo Egea | [@Guhhegea](https://github.com/Guhhegea) |[Scrum Master e Product Owner] | [Organização das sprints, quadro no Trello e revisão de PRs] 
+
+
+| [Nome do colega] | [@luq-i](https://github.com/luq-i) | [Desenvolvedor] | [Pipeline CI/CD, deploy e documentação]  
+
+### Como foi feito a divisão dos trabalhos
+
+- **Scrum:** sprints de 2 semanas, backlog priorizado e quadro no Trello.
+- 
+- **Git:** cada tarefa vira uma branch, integrada à `main` por Pull Request revisado por outro integrante(Lucas campos).
+- 
+- **Pipeline:** a cada push, o GitHub Actions roda lint, testes e build; se passar na `main`, o deploy é automático.
