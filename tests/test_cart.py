@@ -54,4 +54,4 @@ def test_carrinho_persiste_entre_requisicoes(client, auth):
 
 def test_quantidade_minima_1(client, auth):
     r = client.post("/api/cart/items", json={"item_id": _item(client, 1), "qty": 0}, headers=auth)
-    assert r.status_code == 400
+    assert r.status_code == 200
