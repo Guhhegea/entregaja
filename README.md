@@ -31,29 +31,11 @@ Logs JSON no stdout · `GET /health` · `GET /metrics` (formato Prometheus).
 Projeto desenvolvido em grupo para a atividade de DevOps, com processo Scrum, versionamento no GitHub e pipeline de CI/CD.
 
 | Integrante | GitHub | Papel no Scrum | Responsabilidades |
-
 |---|---|---|---|
+| Gustavo Egea | [@Guhhegea](https://github.com/Guhhegea) | Scrum Master e Product Owner | Organização das sprints, quadro no Trello e revisão de PRs |
+| Lucas Campos da Silva | [@luq-i](https://github.com/luq-i) | Desenvolvedor | Pipeline CI/CD, deploy e documentação |
 
-| Gustavo Egea | [@Guhhegea](https://github.com/Guhhegea) |[Scrum Master e Product Owner] | [Organização das sprints, quadro no Trello e revisão de PRs] 
-
-
-| [Lucas campos da Silva] | [@luq-i](https://github.com/luq-i) | [Desenvolvedor] | [Pipeline CI/CD, deploy e documentação]  
-
-### Como foi feito a divisão dos trabalhos
-
+### Como foi feita a divisão dos trabalhos
 - **Scrum:** sprints de 2 semanas, backlog priorizado e quadro no Trello.
-  
-- **Git:** cada tarefa vira uma branch, integrada à `main` por Pull Request revisado por outro integrante(Lucas campos).
-  
+- **Git:** cada tarefa vira uma branch, integrada à `main` por Pull Request revisado por outro integrante.
 - **Pipeline:** a cada push, o GitHub Actions roda lint, testes e build; se passar na `main`, o deploy é automático.
-  
----------------------------------------------------------------------------------------------------------------------------
-Oi! Preciso que você faça mais uma alteração no README do nosso projeto, pelo navegador (não precisa de terminal):
-
-1. Abra https://github.com/Guhhegea/entregaja já logado na sua conta (se aparecer convite, aceite).
-2. Clique em README.md e depois no ícone de lápis (Edit this file).
-3. Na seção "Equipe", acrescente ou ajuste a sua linha com o que você fez no projeto (papel no Scrum e responsabilidades).
-4. Clique em "Commit changes...", escreva a mensagem "docs: atualizando responsabilidades", marque a opção "Create a new branch for this commit and start a pull request" e clique em "Propose changes" e depois em "Create pull request".
-5. Me avisa quando criar, que eu reviso, aprovo e faço o merge.
-
-É importante criar a branch nova e não commitar direto na main, porque o professor vai olhar o histórico de Pull Requests.
