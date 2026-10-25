@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EntregaJá</title>
+<style>
+:root{--bg:#f6f7f9;--sf:#fff;--tx:#1b2430;--mu:#5b6675;--bd:#d9dee5;--ac:#0f766e}
+@media (prefers-color-scheme:dark){:root{--bg:#0f141a;--sf:#18202a;--tx:#e8edf3;--mu:#9aa6b5;--bd:#2c3744;--ac:#2dd4bf}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,sans-serif}
+header{background:var(--ac);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+header h1{margin:0;font-size:20px}main{max-width:720px;margin:auto;padding:16px}
+.box{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:14px}
+input,button{font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx)}
+input{width:100%;margin:4px 0 8px}button{cursor:pointer}button.p{background:var(--ac);color:#fff;border-color:var(--ac)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd)}
+.msg{padding:8px 12px;border-radius:8px;margin-bottom:12px;background:#fee4e2;color:#b42318}.ok{background:#d1fae5;color:#065f46}
+.mu{color:var(--mu);font-size:14px}.hide{display:none}
+</style>
+</head>
+<body>
+<header><h1>EntregaJá</h1><span id="who"></span></header>
+<main>
+<div id="msg" class="msg hide"></div>
+
+<div id="auth" class="box">
+  <h2>Entrar ou criar conta</h2>
+  <input id="name" placeholder="Nome (só no cadastro)">
+  <input id="email" type="email" placeholder="E-mail">
+  <input id="pass" type="password" placeholder="Senha (mín. 8 caracteres)">
+  <button class="p" onclick="entrar('login')">Entrar</button>
+  <button onclick="entrar('register')">Criar conta</button>
+</div>
+
+<div id="app" class="hide">
+  <div class="box"><h2>Restaurantes</h2>
+    <input id="q" placeholder="Buscar por nome ou categoria" oninput="restaurantes()">
+    <div id="rests"></div></div>
+  <div id="menuBox" class="box hide"><h2 id="menuTitle"></h2><div id="menu"></div></div>
+  <div class="box"><h2>Carrinho</h2><div id="cart"></div></div>
+  <div class="box"><h2>Meus pedidos</h2><div id="orders"></div></div>
+</div>
+</main>
+<script>
+let token=localStorage.getItem("token"),timer=null;
+const $=id=>document.getElementById(id),R=c=>"R$ "+(c/100).toFixed(2).replace(".",",");
+function aviso(t,ok){const m=$("msg");m.textContent=t;m.className="msg"+(ok?" ok":"");setTimeout(()=>m.className="msg hide",4000)}
+async function api(path,method="GET",body){
+  const r=await fetch("/api"+path,{method,headers:{"Content-Type":"application/json",...(token?{Authorization:"Bearer "+token}:{})},body:body?JSON.stringify(body):undefined});
+  const d=await r.json().catch(()=>({}));return{ok:r.ok,status:r.status,d}}
+async function entrar(kind){
+  const r=await api("/"+kind,"POST",{name:$("name").value,email:$("email").value,password:$("pass").value});
+  if(!r.ok)return aviso(r.d.erro||"Erro");
+  token=r.d.token;localStorage.setItem("token",token);localStorage.setItem("nome",r.d.name);iniciar()}
+function sair(){localStorage.clear();token=null;location.reload()}
+function iniciar(){
+  $("auth").classList.add("hide");$("app").classList.remove("hide");
+  $("who").innerHTML=(localStorage.getItem("nome")||"")+' <button onclick="sair()">Sair</button>';
+  restaurantes();carrinho();pedidos();clearInterval(timer);timer=setInterval(pedidos,10000)}
+async function restaurantes(){
+  const r=await api("/restaurants?q="+encodeURIComponent($("q").value));
+  $("rests").innerHTML=r.d.map(x=>`<div class="row"><span>${x.name} <span class="mu">· ${x.category}</span></span><button onclick="abrir(${x.id})">Ver cardápio</button></div>`).join("")}
+async function abrir(id){
+  const r=await api("/restaurants/"+id+"/menu");$("menuBox").classList.remove("hide");$("menuTitle").textContent=r.d.restaurant.name;
+  $("menu").innerHTML=r.d.items.map(i=>`<div class="row"><span>${i.name} <span class="mu">${R(i.price_cents)}</span></span><button onclick="add(${i.id})">Adicionar</button></div>`).join("")}
+async function add(id,replace){
+  const r=await api("/cart/items","POST",{item_id:id,replace});
+  if(r.status===409&&confirm("O carrinho tem itens de outro restaurante. Esvaziar e adicionar este item?"))return add(id,true);
+  if(r.ok)carrinho();else if(r.status!==409)aviso(r.d.erro)}
+async function carrinho(){
+  const r=await api("/cart");const c=r.d;
+  if(!c.items||!c.items.length){$("cart").innerHTML='<span class="mu">Carrinho vazio.</span>';return}
+  $("cart").innerHTML=c.items.map(i=>`<div class="row"><span>${i.name} <span class="mu">${R(i.price_cents)}</span></span><span><button onclick="qtd(${i.item_id},${i.qty-1})">−</button> ${i.qty} <button onclick="qtd(${i.item_id},${i.qty+1})">+</button> <button onclick="rem(${i.item_id})">Remover</button></span></div>`).join("")+
+   `<p><b>Total: ${R(c.total_cents)}</b></p><button class="p" onclick="finalizar()">Finalizar pedido</button>`}
+async function qtd(id,q){await api("/cart/items/"+id,"PATCH",{qty:q});carrinho()}
+async function rem(id){await api("/cart/items/"+id,"DELETE");carrinho()}
+async function finalizar(){const r=await api("/orders","POST");if(!r.ok)return aviso(r.d.erro);aviso("Pedido #"+r.d.id+" recebido!",true);carrinho();pedidos()}
+async function pedidos(){
+  const r=await api("/orders");if(!r.ok)return;
+  $("orders").innerHTML=r.d.length?r.d.map(o=>`<div class="row"><span>Pedido #${o.id} · ${R(o.total_cents)}<br><b>${o.status}</b></span>${o.status!=="Entregue"?`<button onclick="avancar(${o.id})">Simular próximo status</button>`:""}</div>`).join(""):'<span class="mu">Nenhum pedido ainda.</span>'}
+async function avancar(id){await api("/orders/"+id+"/advance","POST");pedidos()}
+if(token)iniciar();
+</script>
+</body>
+</html>
