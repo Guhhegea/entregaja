@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EntregaJá</title>
 <style>
-:root{--bg:#f6f7f9;--sf:#fff;--tx:#1b2430;--mu:#5b6675;--bd:#d9dee5;--ac:#0f766e}
-@media (prefers-color-scheme:dark){:root{--bg:#0f141a;--sf:#18202a;--tx:#e8edf3;--mu:#9aa6b5;--bd:#2c3744;--ac:#2dd4bf}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,sans-serif}
-header{background:var(--ac);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+:root{--bg:#f6f7f9;--sf:#fff;--tx:#1b2430;--mu:#5b6675;--bd:#d9dee5;--ac:#0f766e} /*trocar essa linha por :root{--bg:#f6f7f9;--sf:#fff;--tx:#1b2430;--mu:#5b6675;--bd:#d9dee5;--ac:#ea580c;--on:#fff} */
+@media (prefers-color-scheme:dark){:root{--bg:#0f141a;--sf:#18202a;--tx:#e8edf3;--mu:#9aa6b5;--bd:#2c3744;--ac:#2dd4bf}} /*trocar essa linha por @media (prefers-color-scheme:dark){:root{--bg:#0f141a;--sf:#18202a;--tx:#e8edf3;--mu:#9aa6b5;--bd:#2c3744;--ac:#fb923c;--on:#1b2430}} */
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,sans-serif}  /* trocar essa linha por *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,sans-serif}*/
+header{background:var(--ac);color:#fff;padding:12px 16px;display:flex;justify-content:space-between;align-items:center} /* trocar essa linha por header{background:var(--ac);color:var(--on);padding:12px 16px;display:flex;justify-content:space-between;align-items:center} */
 header h1{margin:0;font-size:20px}main{max-width:720px;margin:auto;padding:16px}
 .box{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:14px;margin-bottom:14px}
-input,button{font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx)}
+input,button{font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx)} /* trocar essa linha por input{width:100%;margin:4px 0 8px}button{cursor:pointer}button.p{background:var(--ac);color:var(--on);border-color:var(--ac)}*/
 input{width:100%;margin:4px 0 8px}button{cursor:pointer}button.p{background:var(--ac);color:#fff;border-color:var(--ac)}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--bd)}
 .msg{padding:8px 12px;border-radius:8px;margin-bottom:12px;background:#fee4e2;color:#b42318}.ok{background:#d1fae5;color:#065f46}
